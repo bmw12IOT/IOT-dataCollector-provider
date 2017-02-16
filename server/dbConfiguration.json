@@ -1,0 +1,7 @@
+//MQTT
+
+//hosts example
+{"type":"mqtt","host":"localhost","topic":"exambple/home"}
+
+// push example
+{"type":"mqtt","host":"localhost","topic":"exambple/home","value":"89"}
