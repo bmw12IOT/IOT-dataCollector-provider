@@ -1,16 +1,16 @@
 var MongoClient = require('mongodb').MongoClient;
 
-var MongoDBConnectionProvider = require('./MongoDBConnectionProvider');
+var databaseInterface = require('./database/DatabaseInterface');
 
-var MqttAdmin = require('./pusch/mqtt/MqttAdmin');
+var MqttAdmin = require('./dataCollector/pusch/mqtt/MqttAdmin');
 
 
 var admins = [];
 
-var cli = new MongoDBConnectionProvider(onDBConnect);
 
-function onDBConnect() {
-  db = MongoDBConnectionProvider.static.getDatabase();
+databaseInterface.createDbConnection(onDbConnect);
 
-  admins.push(new MqttAdmin(db));
+function onDbConnect() {
+
+  admins.push(new MqttAdmin());
 }
