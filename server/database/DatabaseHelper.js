@@ -6,7 +6,6 @@ var url = 'mongodb://localhost:27017/iotData';
 
 class DatabaseHelper {
   constructor() {
-    console.log("dfsdfs");
     this.dbConnection = {};
 
     this.hostCollection = {};
@@ -18,17 +17,19 @@ class DatabaseHelper {
     return;
   }
 
-  getSortedHostCollectionFor(type, callback) {
+  getSortedHostCollectionFor(type) {
     var options = {
         "sort": "host"
     };
 
-    this.hostCollection.find({"type": type}, options).toArray((err,results) => {
-      if (!err) {
-        callback(results);
-      } else {
-        console.log("sql Error");
-      }
+    return new Promise((fulfill, reject) => {
+      this.hostCollection.find({"type": type}, options).toArray((err,results) => {
+        if (!err) {
+          fulfill(results);
+        } else {
+          reject(err);
+        }
+      });
     });
   }
 }
