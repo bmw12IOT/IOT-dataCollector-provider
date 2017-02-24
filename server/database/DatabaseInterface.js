@@ -1,24 +1,31 @@
-var DatabaseHelper = require('./DatabaseHelper');
+var databaseHelper = require('./DatabaseHelper');
 
 
 class DatabaseInterface {
   constructor() {
-    this.databaseHelper = new DatabaseHelper();
+    console.log("dfs");
   }
 
-  createDbConnection(callback) {
-    this.databaseHelper.createDbConnection(function () {
-      callback();
-    });
+  async createDbConnection() {
+      try {
+        console.log("try1");
+        await databaseHelper.createDbConnection();
+        console.log("try2");
+        return false;
+      } catch (e) {
+        console.log("catch");
+        console.log(e);
+        return true;
+      }
   }
 
   getSortedHostCollectionFor(type, callback) {
-    this.databaseHelper.getSortedHostCollectionFor(type, function(results) {
+    databaseHelper.getSortedHostCollectionFor(type, function(results) {
       callback(results);
     });
   }
 }
 
-var databaseInterface = new DatabaseInterface();
 
+var databaseInterface = new DatabaseInterface();
 module.exports = databaseInterface;

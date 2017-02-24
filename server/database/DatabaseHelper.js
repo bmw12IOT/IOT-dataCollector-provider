@@ -1,20 +1,21 @@
-var MongoDBConnectionProvider = require('./MongoDBConnectionProvider');
+var mongoClient = require('mongodb').MongoClient;
 
+
+// Connection URL
+var url = 'mongodb://localhost:27017/iotData';
 
 class DatabaseHelper {
   constructor() {
+    console.log("dfsdfs");
     this.dbConnection = {};
 
     this.hostCollection = {};
   }
 
-  createDbConnection(callback) {
-    var mongoDBConnectionProvider = new MongoDBConnectionProvider(() => {
-      this.dbConnection = MongoDBConnectionProvider.static.getDatabase();
-      this.hostCollection = this.dbConnection.collection("hosts");
-
-      callback();
-    });
+  async createDbConnection() {
+    this.dbConnection = await mongoClient.connect(url);
+    this.hostCollection = this.dbConnection.collection("hosts");
+    return;
   }
 
   getSortedHostCollectionFor(type, callback) {
@@ -31,4 +32,6 @@ class DatabaseHelper {
     });
   }
 }
-module.exports = DatabaseHelper;
+
+var databaseHelper = new DatabaseHelper();
+module.exports = databaseHelper;
