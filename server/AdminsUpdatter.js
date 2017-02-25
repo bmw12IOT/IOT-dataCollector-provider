@@ -11,6 +11,10 @@ class AdminsUpdatter {
     clearInterval(this.updatingInterval);
   }
 
+  hostTypeFilter(host) {
+    return((host.type === this)? true: false);
+  }
+
   async startUpdating(admins) {
     this.admins = admins;
     this.updatingInterval = setInterval(async () =>{
@@ -18,25 +22,14 @@ class AdminsUpdatter {
         var HostsQuerry = await databaseInterface.getSortedHostCollection();
         if (HostsQuerry != this.oldHostsQuerry) {
           this.oldHostsQuerry = HostsQuerry;
-          var activeType = "";
           var activeHostList = [];
-          for (var host of HostsQuerry) {
-            if (activeType == "") {
-              activeType = host.type;
-            }
-            if (activeType === host.type) {
-              activeHostList.push(host);
-            } else {
-              this.sendUpdateToAdmin(activeHostList);
-
-              activeHostList = [];
-              activeType = host.type;
-              activeHostList.push(host);
+          for (var type in this.admins) {
+            if (this.admins.hasOwnProperty(type)) {
+              activeHostList = HostsQuerry.filter(this.hostTypeFilter, type);
+              admins[type].update(activeHostList);
             }
           }
-          this.sendUpdateToAdmin(activeHostList);
         }
-
       } catch (e) {
         console.warn("error while updating");
         console.warn(e);
@@ -44,16 +37,6 @@ class AdminsUpdatter {
       }
     }, 1000);
   }
-
-  sendUpdateToAdmin(activeHostList){
-    var activeType = activeHostList[0].type;
-    if (this.admins.hasOwnProperty(activeType)) {
-      this.admins[activeType].update(activeHostList);
-    } else {
-      console.warn("Type with no admin in database type: " + activeType);
-    }
-  }
-
 }
 
 var adminsUpdatter = new AdminsUpdatter();
