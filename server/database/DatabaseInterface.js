@@ -12,6 +12,10 @@ class DatabaseInterface {
   async getSortedHostCollectionFor(type) {
     return await databaseHelper.getSortedHostCollectionFor(type);
   }
+
+  async getSortedHostCollection() {
+    return await databaseHelper.getSortedHostCollection();
+  }
 }
 
 

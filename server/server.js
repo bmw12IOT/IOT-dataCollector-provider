@@ -2,11 +2,12 @@
 ///////////////////////////////////////////////
 
 var databaseInterface = require('./database/DatabaseInterface');
+var adminsUpdatter = require('./AdminsUpdatter');
 
-//var MqttAdmin = require('./dataCollector/pusch/mqtt/MqttAdmin');
+var MqttAdmin = require('./dataCollector/pusch/mqtt/MqttAdmin');
 
 
-var admins = [];
+var admins = {};
 
 try {
   await databaseInterface.createDbConnection()
@@ -16,14 +17,12 @@ try {
   process.exit(1);
 }
 
-try {
-  var result = await databaseInterface.getSortedHostCollectionFor("mqtt");
-  console.log(result);
-} catch (e) {
-  console.error(e);
-}
 
-//admins.push(new MqttAdmin());
+
+admins["mqtt"] = new MqttAdmin();
+
+adminsUpdatter.startUpdating(admins);
+
 
 ///////////////////////////////////////////////
 })();

@@ -17,6 +17,22 @@ class DatabaseHelper {
     return;
   }
 
+  getSortedHostCollection() {
+    var options = {
+        "sort": "host"
+    };
+
+    return new Promise((fulfill, reject) => {
+      this.hostCollection.find({}, options).toArray((err,results) => {
+        if (!err) {
+          fulfill(results);
+        } else {
+          reject(err);
+        }
+      });
+    });
+  }
+
   getSortedHostCollectionFor(type) {
     var options = {
         "sort": "host"
