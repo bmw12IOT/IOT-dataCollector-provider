@@ -2,7 +2,7 @@ var databaseInterface = require('./database/DatabaseInterface');
 
 class AdminsUpdatter {
   constructor() {
-    this.oldHostsQuerry = [];
+    this.oldHostsQuerry = "";
     this.admins = {};
     this.updatingInterval = {};
   }
@@ -12,9 +12,11 @@ class AdminsUpdatter {
   }
 
   hostTypeFilter(host, id, arr) {
-    if (host.type === this) {
-      arr[id] = null;
-      return true
+    if (host.hasOwnProperty('type')) {
+      if (host.type === this) {
+        arr[id] = null;
+        return (true);
+      }
     }
     return(false);
   }
@@ -24,8 +26,9 @@ class AdminsUpdatter {
     this.updatingInterval = setInterval(async () =>{
       try {
         var HostsQuerry = await databaseInterface.getSortedHostCollection();
-        if (HostsQuerry != this.oldHostsQuerry) {
-          this.oldHostsQuerry = HostsQuerry;
+        if (this.oldHostsQuerry != JSON.stringify(HostsQuerry)) {
+          console.log("a");
+          this.oldHostsQuerry = JSON.stringify(HostsQuerry);
           var activeHostList = [];
           for (var type in this.admins) {
             if (this.admins.hasOwnProperty(type)) {
@@ -49,7 +52,7 @@ class AdminsUpdatter {
         console.warn(e);
         process.exit(1);
       }
-    }, 1000);
+    }, 500);
   }
 }
 
