@@ -11,8 +11,12 @@ class AdminsUpdatter {
     clearInterval(this.updatingInterval);
   }
 
-  hostTypeFilter(host) {
-    return((host.type === this)? true: false);
+  hostTypeFilter(host, id, arr) {
+    if (host.type === this) {
+      arr[id] = null;
+      return true
+    }
+    return(false);
   }
 
   async startUpdating(admins) {
@@ -27,6 +31,16 @@ class AdminsUpdatter {
             if (this.admins.hasOwnProperty(type)) {
               activeHostList = HostsQuerry.filter(this.hostTypeFilter, type);
               admins[type].update(activeHostList);
+            }
+          }
+
+          for (var unUsedHost of HostsQuerry) {
+            if (unUsedHost != null) {
+              if (unUsedHost.hasOwnProperty('type')) {
+                console.warn("Type with no admin in database type: " + unUsedHost.type);
+              } else {
+                console.warn("there is false data in the hosts collection");
+              }
             }
           }
         }
