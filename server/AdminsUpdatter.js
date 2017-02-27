@@ -1,3 +1,4 @@
+"use strict";
 var databaseInterface = require('./database/DatabaseInterface');
 
 class AdminsUpdatter {

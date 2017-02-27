@@ -1,4 +1,4 @@
-
+"use strict";
 class MqttListener {
   constructor(listenerlist) {
     console.log("new");
